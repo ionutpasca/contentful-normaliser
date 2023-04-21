@@ -1,3 +1,5 @@
+const { xxx } = require('./data')
+
 const normalizeContent = (content) => {
   if (Array.isArray(content)) {
     return content.map((item) => normalizeContent(item))
@@ -5,6 +7,10 @@ const normalizeContent = (content) => {
 
   if (typeof content !== 'object') {
     return content
+  }
+
+  if (Object.keys(content.fields).length && Object.keys(content.sys).length) {
+    return { ...content.fields, ...content.sys, ...content }
   }
 
   return Object.keys(content).reduce((acc, key) => {
