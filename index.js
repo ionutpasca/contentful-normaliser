@@ -7,32 +7,24 @@ const normalizeContent = (content) => {
     return content
   }
 
-  if (Object.keys(content.fields).length && Object.keys(content.sys).length) {
-    return { ...content.fields, ...content.sys, ...content }
+  if (
+    Object.keys(content.fields || {})?.length &&
+    Object.keys(content.sys || {})?.length
+  ) {
+    return normaliseObject(content)
   }
 
   return Object.keys(content).reduce((acc, key) => {
     if (Array.isArray(content[key])) {
       acc[key] = content[key].map((item) => {
-        const data = normalizeContent({ data: item })
-        return data.data
+        return normalizeContent(item)
       })
+
       return acc
     }
 
     if (typeof content[key] === 'object') {
-      let normalisedFields = {}
-      let normalisedSys = {}
-
-      if (content[key].fields) {
-        normalisedFields = normalizeContent(content[key].fields)
-      }
-
-      if (content[key].sys) {
-        normalisedSys = normalizeContent(content[key].sys)
-      }
-
-      acc[key] = { ...normalisedFields, ...normalisedSys, ...content[key] }
+      acc[key] = { ...normaliseObject(content[key]) }
 
       return acc
     }
@@ -40,6 +32,21 @@ const normalizeContent = (content) => {
     acc[key] = content[key]
     return acc
   }, {})
+}
+
+const normaliseObject = (content) => {
+  let normalisedFields = {}
+  let normalisedSys = {}
+
+  if (content.fields) {
+    normalisedFields = normalizeContent(content.fields)
+  }
+
+  if (content.sys) {
+    normalisedSys = normalizeContent(content.sys)
+  }
+
+  return { ...normalisedFields, ...normalisedSys, ...content }
 }
 
 module.exports = normalizeContent
