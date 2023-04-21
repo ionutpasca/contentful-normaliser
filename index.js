@@ -41,6 +41,13 @@ const normaliseObject = (content) => {
 
   if (content.fields) {
     normalisedFields = normalizeContent(content.fields)
+
+    if (normalisedFields.file) {
+      normalisedFile = {
+        ...normalisedFile,
+        ...normalizeContent(normalisedFields.file),
+      }
+    }
   }
 
   if (content.sys) {
@@ -48,7 +55,7 @@ const normaliseObject = (content) => {
   }
 
   if (content.file) {
-    normalisedFile = normalizeContent(content.file)
+    normalisedFile = { ...normalisedFile, ...normalizeContent(content.file) }
   }
 
   return {
