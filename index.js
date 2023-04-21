@@ -37,6 +37,7 @@ const normalizeContent = (content) => {
 const normaliseObject = (content) => {
   let normalisedFields = {}
   let normalisedSys = {}
+  let normalisedFile = {}
 
   if (content.fields) {
     normalisedFields = normalizeContent(content.fields)
@@ -46,7 +47,16 @@ const normaliseObject = (content) => {
     normalisedSys = normalizeContent(content.sys)
   }
 
-  return { ...normalisedFields, ...normalisedSys, ...content }
+  if (content.file) {
+    normalisedFile = normalizeContent(content.file)
+  }
+
+  return {
+    ...normalisedFields,
+    ...normalisedSys,
+    ...normalisedFile,
+    ...content,
+  }
 }
 
 module.exports = normalizeContent
