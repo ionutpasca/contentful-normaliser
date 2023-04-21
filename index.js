@@ -1,5 +1,3 @@
-const { xxx } = require('./data')
-
 const normalizeContent = (content) => {
   if (Array.isArray(content)) {
     return content.map((item) => normalizeContent(item))
