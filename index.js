@@ -1,4 +1,12 @@
 const normalizeContent = (content) => {
+  if (Array.isArray(content)) {
+    return content.map((item) => normalizeContent(item))
+  }
+
+  if (typeof content !== 'object') {
+    return content
+  }
+
   return Object.keys(content).reduce((acc, key) => {
     if (Array.isArray(content[key])) {
       acc[key] = content[key].map((item) => {
